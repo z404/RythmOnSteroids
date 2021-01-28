@@ -30,6 +30,13 @@ async def leave(ctx):
     voice_client = server.voice_client
     await voice_client.disconnect()
 
+@client.command(pass_context = True)
+async def stop(ctx):
+    server = ctx.message.guild
+    voice_client = server.voice_client
+    try:
+        await voice_client.stop()
+    except: pass
 ##@client.command(pass_context = True)
 ##async def play(ctx,url):
 ##    server = ctx.message.guild
