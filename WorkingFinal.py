@@ -1,6 +1,6 @@
 import asyncio
 
-import discord
+import discord #pip install discord
 import youtube_dl
 
 from discord.ext import commands
@@ -105,15 +105,23 @@ class Music(commands.Cog):
         await ctx.send("Changed volume to {}%".format(volume))
 
     @commands.command()
-    async def stop(self, ctx):
+    async def disconnect(self, ctx):
         """Stops and disconnects the bot from voice"""
 
         await ctx.voice_client.disconnect()
+        await 
+    @commands.command()
+    async def stop(self, ctx):
+        """Stops the current song"""
+
+        ctx.voice_client.stop()
+
 
     @playlocal.before_invoke
     @yt.before_invoke
     @play.before_invoke
     async def ensure_voice(self, ctx):
+        print(ctx.voice_client,ctx.author.voice)
         if ctx.voice_client is None:
             if ctx.author.voice:
                 await ctx.author.voice.channel.connect()
