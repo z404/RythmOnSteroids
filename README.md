@@ -1,6 +1,6 @@
 # RythmOnSteroids
 
-Bot to implement "radio" concept to a music playing bot on discord
+Bot to implement "radio" concept to a music playing bot on discord. Bot now works on repl.it
 
 Trial 1: Attemts to connect and play a song given a url (working)
 Trial 2: Attemts to stream a song given either a search term or a url. Can also play local files
