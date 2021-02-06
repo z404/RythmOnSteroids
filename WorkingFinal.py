@@ -517,6 +517,7 @@ bot.add_cog(Music(bot))
 @bot.event
 async def on_ready():
     print('Logged in as:\n{0.user.name}\n{0.user.id}'.format(bot))
+    await bot.change_presence(activity=discord.Game('With Fire'))
 
 with open('creds.txt') as file:
     TOKEN = file.read()
