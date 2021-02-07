@@ -490,6 +490,32 @@ class Music(commands.Cog):
 
         async with ctx.typing():
             try:
+                YTDL_OPTIONS = {
+                    'format': 'bestaudio/best',
+                    'extractaudio': True,
+                    'audioformat': 'mp3',
+                    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+                    'restrictfilenames': True,
+                    'noplaylist': True,
+                    'nocheckcertificate': True,
+                    'ignoreerrors': False,
+                    'logtostderr': False,
+                    'quiet': True,
+                    'no_warnings': True,
+                    'default_search': 'auto',
+                    'source_address': '0.0.0.0',
+                }
+
+                FFMPEG_OPTIONS = {
+                    'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
+                    'options': '-vn',
+                }
+
+                ytdl = youtube_dl.YoutubeDL(YTDL_OPTIONS) 
+                partial = functools.partial(ytdl.extract_info, search,            download=False, process=False)
+                loop = asyncio.get_event_loop()
+                data = await loop.run_in_executor(None, partial)
+                print(data)
                 source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
             except YTDLError as e:
                 await ctx.send('An error occurred while processing this request: {}'.format(str(e)))
