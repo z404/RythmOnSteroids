@@ -385,9 +385,9 @@ class Music(commands.Cog):
 
         ctx.voice_state.songs.clear()
 
-        if not ctx.voice_state.is_playing:
-            ctx.voice_state.voice.stop()
-            await ctx.message.add_reaction('⏹')
+        #if not ctx.voice_state.is_playing:
+        ctx.voice_state.voice.stop()
+        await ctx.message.add_reaction('⏹')
 
     @commands.command(name='skip')
     async def _skip(self, ctx: commands.Context):
@@ -535,15 +535,37 @@ class Music(commands.Cog):
             if ctx.voice_client.channel != ctx.author.voice.channel:
                 raise commands.CommandError('Bot is already in a voice channel.')
 
+class Fun(commands.Cog):
+    def __init__(self, bot: commands.Bot):
+        self.bot = bot
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or("!"),description='Yet another music bot.')
+    @commands.command(name='changestatus')
+    async def _changestatus(self, ctx: commands.Context, typeofstatus, *message):
+        '''Changes the bot\'s status to the given message'''
+        message = ' '.join(message)
+        if typeofstatus.lower() == 'playing':
+            await bot.change_presence(activity=discord.Game(message))
+        elif typeofstatus.lower() == 'watching':
+            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=message))
+        elif typeofstatus.lower() == 'listeningto':
+            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=message))
+        elif typeofstatus.lower() == 'streaming':
+            if 'twitch' not in message.split()[-1]:
+                await ctx.send('Please provide a twitch url')
+            else:
+                await bot.change_presence(activity=discord.Streaming(name=' '.join(message.split()[:-1]), url=message.split()[-1]))
+        else:
+            await ctx.send('Wrong format! format = <type> <message> <url (for stream)> Choose type from ["playing","watching","listeningto","streaming"]')
+
+bot = commands.Bot(command_prefix=commands.when_mentioned_or("!"),description='Developed by Wilford Warfstache#0256')
 bot.add_cog(Music(bot))
+bot.add_cog(Fun(bot))
 
 
 @bot.event
 async def on_ready():
     print('Logged in as:\n{0.user.name}\n{0.user.id}'.format(bot))
-    await bot.change_presence(activity=discord.Game('With Fire'))
+    await bot.change_presence(activity=discord.Game('With Myself'))
 
 with open('creds.txt') as file:
     TOKEN = file.read()
